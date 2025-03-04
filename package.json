@@ -1,0 +1,16 @@
+{
+  "name": "account-management-fullstack",
+  "version": "1.0.0",
+  "description": "test project ",
+  "repository": {
+    "type": "git",
+    "url": "account-management-fullstack"
+  },
+  "license": "ISC",
+  "author": "Alec",
+  "type": "commonjs",
+  "main": "./",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
