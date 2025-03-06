@@ -1,0 +1,10 @@
+:root {
+    --primary: rgba(0, 0, 0, 1);
+    --secondary: rgba(102, 102, 102, 1);
+    --thirdly: rgba(166, 163, 173, 1);
+    --highlight: rgba(64, 123, 255, 1);
+    --primary-w: white;
+    --btn-non-active: rgba(245, 245, 245, 1);
+  }
+
+  

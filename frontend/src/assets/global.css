@@ -1,0 +1,8 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Freeman&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lalezar&family=Oswald:wght@200..700&family=Rubik:ital,wght@0,700;1,700&display=swap');
+
+#app {
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1 {font-size: 30px; font-weight: 400;}
