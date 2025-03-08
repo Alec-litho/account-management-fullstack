@@ -1,7 +1,7 @@
 # account-management-fullstack-test
 
 # Frontend
-## navigate to backend
+## navigate to frontend directory
 ```
 cd frontend
 ```
@@ -14,7 +14,7 @@ npm install
 npm run serve
 ```
 # Backend
-## navigate to backend
+## navigate to backend directory
 ```
 cd backend
 ```
