@@ -6,3 +6,39 @@
   }
 
   h1 {font-size: 30px; font-weight: 400;}
+
+.passwordInput,
+.loginInput,
+.tabNumberInput {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 12px;
+  height: 56px;
+}
+
+.passwordInput,
+.loginInput,
+.tabNumberInput::placeholder {
+  color: var(--thirdly);
+}
+
+.loginBtn {
+  width: 100%;
+  min-height: 56px;
+  background-color: var(--btn-non-active);
+  color: var(--secondary);
+  font-size: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.loginBtn.active {
+  background-color: var(--highlight);
+  color: white;
+}
+.loginBtn.active:hover {
+  background-color: #0056b3;
+}

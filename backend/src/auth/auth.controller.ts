@@ -1,24 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpStatus,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpStatus } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { Auth } from '../auth/entities/auth.entity';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { User } from 'src/user/entities/user.entity';
 
@@ -45,7 +29,7 @@ export class AuthController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Error, some of the fields are not provided',
   })
-  @ApiOkResponse({ type: Auth })
+  @ApiOkResponse({ type: User })
   @Post('/login')
   login(@Body() LoginUserDTO: LoginUserDTO) {
     return this.authService.login(LoginUserDTO);

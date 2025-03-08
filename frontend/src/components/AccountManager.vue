@@ -7,15 +7,15 @@
 
       <div class="accountsContainer">
         <div class="addAccount" @click="showFullLogin = true">
-          <button class="addAccountBtn">+</button>
+          <RouterLink to="/register" class="addAccountBtn"><p>+</p></RouterLink>
           <p>Добавить аккаунт</p>
         </div>
 
-        <div class="accounts-scroller">
+        <div class="accountsScroller">
           <div
-            v-for="account in savedAccounts"
+            v-for="account in store.getAccounts"
             :key="account.id"
-            class="account-item"
+            class="accountItem"
             @click="selectAccount(account)"
           >
             <AccountItem :account="account" />
@@ -27,62 +27,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import AccountItem from "./AccountItem.vue";
+import { useAccountStore } from "@/stores/accountStore";
 
-const savedAccounts = ref<ERPAccount[]>([]);
-const selectedAccount = ref<ERPAccount | null>(null);
+const store = useAccountStore();
+store.loadFromLocalStorage();
+
+const selectedAccount = ref<StoredAccount | null>(null);
 const showFullLogin = ref(false);
-
-const newAccount = ref({
-  employeeId: "",
-  login: "",
-  password: "",
-  remember: false,
-});
-
-// Загрузка сохраненных аккаунтов
-onMounted(() => {
-  const storedAccounts = localStorage.getItem("erpAccounts");
-  if (storedAccounts) {
-    savedAccounts.value = JSON.parse(storedAccounts);
-  }
-});
-
-const selectAccount = (account: ERPAccount) => {
+const selectAccount = (account: StoredAccount) => {
   selectedAccount.value = account;
-};
-
-const handleFullLogin = () => {
-  if (
-    !newAccount.value.employeeId ||
-    !newAccount.value.login ||
-    !newAccount.value.password
-  ) {
-    alert("Заполните все поля");
-    return;
-  }
-
-  const account: ERPAccount = {
-    id: Date.now().toString(),
-    fullName: "Иванова И.И.", // Пример, должно быть из системы
-    employeeId: newAccount.value.employeeId,
-    login: newAccount.value.login,
-  };
-
-  if (newAccount.value.remember) {
-    savedAccounts.value = [account, ...savedAccounts.value];
-    localStorage.setItem("erpAccounts", JSON.stringify(savedAccounts.value));
-  }
-
-  // Сброс полей
-  newAccount.value = {
-    employeeId: "",
-    login: "",
-    password: "",
-    remember: false,
-  };
-  showFullLogin.value = false;
 };
 </script>
 
@@ -133,6 +88,9 @@ const handleFullLogin = () => {
 
 .accountsContainer {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .addAccount {
@@ -145,34 +103,46 @@ const handleFullLogin = () => {
   justify-content: flex-start;
   backdrop-filter: blur(30px);
   background-color: rgba(255, 255, 255, 0.5);
+  color: var(--secondary);
   box-shadow: 0px 0px 15px 0px rgba(21, 68, 150, 0.2);
   border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.addAccount:hover {
+  background-color: rgba(255, 255, 255, 0.4);
 }
 .addAccountBtn {
+  position: relative;
   width: 60px;
   height: 60px;
   background-color: white;
+  color: var(--secondary);
   border-radius: 50%;
   font-size: 40px;
 }
 
-.add-account-btn:hover {
-  background: #f8f9fa;
+.addAccountBtn p {
+  position: absolute;
+  left: 30%;
+  bottom: 15%;
 }
 
-.accounts-scroller {
-  max-height: 300px;
+.accountsScroller {
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
   overflow-y: auto;
 }
-
-.account-item {
-  padding: 16px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
+.accountsScroller::-webkit-scrollbar {
+  display: none;
 }
 
-.account-item:hover {
-  background: #f8f9fa;
+.accountItem {
+  width: 100%;
+  cursor: pointer;
 }
 
 .account-details {
@@ -188,76 +158,5 @@ const handleFullLogin = () => {
 .account-id {
   color: #95a5a6;
   font-size: 0.9em;
-}
-
-.password-section {
-  margin: 24px 0;
-}
-
-.password-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #2c3e50;
-}
-
-.password-input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-}
-
-.input-group {
-  margin-bottom: 20px;
-}
-
-.form-input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-}
-
-.remember-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 20px 0;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.login-btn {
-  flex: 1;
-  padding: 14px;
-  background: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.login-btn:hover {
-  background: #2980b9;
-}
-
-.back-btn {
-  flex: 1;
-  padding: 14px;
-  background: #95a5a6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.back-btn:hover {
-  background: #7f8c8d;
 }
 </style>

@@ -8,33 +8,36 @@ import { CreateUserDTO } from '../auth/dto/create-user.dto';
 import { LoginUserDTO } from '../auth/dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { Auth } from './entities/auth.entity';
 import { User } from 'src/user/entities/user.entity';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject('USER_REPOSITORY') private userRepository: typeof User,
+    @InjectModel(User) private userRepository: typeof User,
     private jwtService: JwtService,
   ) {}
 
   async register(createUser: CreateUserDTO) {
     const hashedPassword = await bcrypt.hash(createUser.password, 10);
+    console.log(createUser);
     let registerUser = {
       ...createUser,
       password: hashedPassword,
     };
-    return await this.userRepository.create(registerUser);
+    const account = await this.userRepository.create(registerUser);
+    return {
+      account,
+      accessToken: this.jwtService.sign({ userId: account.id }),
+    };
   }
 
   async login(loginUserDTO: LoginUserDTO) {
     const user = await this.userRepository.findOne({
-      where: { name: loginUserDTO.name },
+      where: { id: loginUserDTO.id },
     });
     if (!user)
-      throw new NotFoundException(
-        `No user found for name: ${loginUserDTO.name}`,
-      );
+      throw new NotFoundException(`No user found for id: ${loginUserDTO.id}`);
 
     const isPasswordValid = await bcrypt.compare(
       loginUserDTO.password,
@@ -42,9 +45,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) throw new UnauthorizedException('Invalid password');
-    return {
-      accessToken: this.jwtService.sign({ userId: user.id }),
-    };
+    return user;
   }
 
   async validateJwtUser(userId: number): Promise<{ id: number }> {

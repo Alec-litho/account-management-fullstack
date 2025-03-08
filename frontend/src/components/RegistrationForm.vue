@@ -1,9 +1,10 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="auth-form">
-    <h1 class="form-header">Вход в ERP-систему</h1>
-    <div class="form-group">
+  <form @submit.prevent="handleSubmit" class="authForm">
+    <h1 class="formHeader">Вход в ERP-систему</h1>
+    <div class="formGroup">
       <label for="tabNumber">Табельный номер</label>
       <input
+        class="passwordInput"
         type="text"
         id="tabNumber"
         v-model="state.tabNumber"
@@ -13,9 +14,10 @@
       <div v-if="errors.tabNumber" class="error">{{ errors.tabNumber }}</div>
     </div>
 
-    <div class="form-group">
+    <div class="formGroup">
       <label for="login">Логин</label>
       <input
+        class="loginInput"
         type="text"
         id="login"
         v-model="state.login"
@@ -25,61 +27,67 @@
       <div v-if="errors.login" class="error">{{ errors.login }}</div>
     </div>
 
-    <div class="form-group">
-      <label for="password">Пароль</label>
+    <div class="formGroup">
+      <div class="formHeader">
+        <label for="password">Пароль</label>
+        <ShowPassword :setVisible="setVisible" :isVisible="isVisible" />
+      </div>
       <input
+        class="tabNumberInput"
         type="password"
         id="password"
         v-model="state.password"
         placeholder="Введите пароль"
         @input="validateForm"
+        ref="password"
       />
       <div v-if="errors.password" class="error">{{ errors.password }}</div>
     </div>
 
-    <div class="form-group remember">
-      <input type="checkbox" v-model="state.rememberAccount" />
+    <div class="formGroup remember">
+      <input type="checkbox" @click="handleRememberMe" />
       <p>Запомнить аккаунт</p>
     </div>
 
-    <button type="submit" :class="isValid ? 'submit-btn.active' : 'submit-btn'">
+    <button type="submit" :class="isValid ? 'loginBtn active' : 'loginBtn'">
       Войти
     </button>
   </form>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-
-interface FormState {
-  tabNumber: string;
-  login: string;
-  password: string;
-  rememberAccount: boolean;
-}
-
-interface FormErrors {
-  tabNumber?: string;
-  login?: string;
-  password?: string;
-}
+import { reactive, ref, useTemplateRef } from "vue";
+import { useAccountStore } from "@/stores/accountStore";
+import router from "@/router";
+import ShowPassword from "./ShowPassword.vue";
 
 const state = reactive<FormState>({
   tabNumber: "",
   login: "",
   password: "",
-  rememberAccount: false,
 });
-const isValid = ref(false);
-const errors = reactive<FormErrors>({});
 
+const store = useAccountStore();
+const isValid = ref(false);
+const errors = reactive<FormErrors>({ tabNumber: "", login: "", password: "" });
+const passwordInput = useTemplateRef("password");
+const isVisible = ref(false);
 const validateForm = (): boolean => {
   isValid.value =
     state.password && state.login && state.tabNumber ? true : false;
-
   return isValid.value;
 };
+const handleRememberMe = (event: any) => {
+  store.setRemember(event.target.checked);
+};
 
+const setVisible = (): void => {
+  isVisible.value = !isVisible.value;
+  passwordInput.value!.setAttribute(
+    "type",
+    isVisible.value ? "text" : "password"
+  );
+};
 function showErrors() {
   errors.tabNumber = "";
   errors.login = "";
@@ -87,7 +95,6 @@ function showErrors() {
   if (!state.login.trim()) {
     errors.login = "Логин обязателен";
   }
-
   if (!state.password.trim()) {
     errors.password = "Пароль обязателен";
   }
@@ -96,14 +103,10 @@ function showErrors() {
   }
 }
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (validateForm()) {
-    console.log("Отправка данных:", {
-      tabNumber: state.tabNumber,
-      login: state.login,
-      password: state.password,
-      remember: state.rememberAccount,
-    });
+    await store.createAccount(state);
+    if (store.currentAccount) router.push("/accounts");
   } else {
     showErrors();
   }
@@ -114,7 +117,7 @@ const handleSubmit = () => {
 @import url("../assets/reset.css");
 @import url("../assets/variables.css");
 
-.auth-form {
+.authForm {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -122,34 +125,26 @@ const handleSubmit = () => {
   margin: 20px auto;
   padding: 20px;
 }
-.form-header {
+.formHeader {
   margin-bottom: 5px;
 }
 
-.form-group {
+.formGroup {
   width: 100%;
 }
 
-.form-group label {
+.formGroup label {
   display: block;
   margin-bottom: 0.5rem;
 }
-
-.form-group input[type="text"],
-.form-group input[type="password"] {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  height: 56px;
+.formHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.form-group input[type="text"]::placeholder {
-  color: var(--thirdly);
+.loginBtn.active {
+  background-color: var(--highlight);
 }
-.form-group input[type="password"]::placeholder {
-  color: var(--thirdly);
-}
-
 .remember {
   display: flex;
   align-items: center;
@@ -160,24 +155,6 @@ const handleSubmit = () => {
   width: 24px;
   height: 24px;
   margin-right: 15px;
-}
-.submit-btn {
-  width: 100%;
-  min-height: 56px;
-  background-color: var(--btn-non-active);
-  color: var(--secondary);
-  font-size: 20px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.submit-btn.active {
-  background-color: var(--highlight);
-}
-
-.submit-btn.active:hover {
-  background-color: #0056b3;
 }
 
 .error {
