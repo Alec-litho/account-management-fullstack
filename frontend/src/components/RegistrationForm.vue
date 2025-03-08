@@ -1,49 +1,31 @@
 <template>
   <form @submit.prevent="handleSubmit" class="authForm">
     <h1 class="formHeader">Вход в ERP-систему</h1>
+    <!-- tab number form -->
     <div class="formGroup">
       <label for="tabNumber">Табельный номер</label>
-      <input
-        class="passwordInput"
-        type="text"
-        id="tabNumber"
-        v-model="state.tabNumber"
-        placeholder="Введите табельный номер"
-        @input="validateForm"
-      />
+      <input class="passwordInput" type="text" id="tabNumber" v-model="state.tabNumber" placeholder="Введите табельный номер" @input="validateForm" />
       <div v-if="errors.tabNumber" class="error">{{ errors.tabNumber }}</div>
     </div>
 
+    <!-- login form -->
     <div class="formGroup">
       <label for="login">Логин</label>
-      <input
-        class="loginInput"
-        type="text"
-        id="login"
-        v-model="state.login"
-        placeholder="Введите логин"
-        @input="validateForm"
-      />
+      <input class="loginInput" type="text" id="login" v-model="state.login" placeholder="Введите логин" @input="validateForm" />
       <div v-if="errors.login" class="error">{{ errors.login }}</div>
     </div>
 
+    <!-- password form -->
     <div class="formGroup">
       <div class="formHeader">
         <label for="password">Пароль</label>
         <ShowPassword :setVisible="setVisible" :isVisible="isVisible" />
       </div>
-      <input
-        class="tabNumberInput"
-        type="password"
-        id="password"
-        v-model="state.password"
-        placeholder="Введите пароль"
-        @input="validateForm"
-        ref="password"
-      />
+      <input class="tabNumberInput" type="password" id="password" v-model="state.password" placeholder="Введите пароль" @input="validateForm" ref="password" />
       <div v-if="errors.password" class="error">{{ errors.password }}</div>
     </div>
 
+    <!-- remember checkbox -->
     <div class="formGroup remember">
       <input type="checkbox" @click="handleRememberMe" />
       <p>Запомнить аккаунт</p>
@@ -72,9 +54,9 @@ const isValid = ref(false);
 const errors = reactive<FormErrors>({ tabNumber: "", login: "", password: "" });
 const passwordInput = useTemplateRef("password");
 const isVisible = ref(false);
+
 const validateForm = (): boolean => {
-  isValid.value =
-    state.password && state.login && state.tabNumber ? true : false;
+  isValid.value = state.password && state.login && state.tabNumber ? true : false;
   return isValid.value;
 };
 const handleRememberMe = (event: any) => {
@@ -88,7 +70,7 @@ const setVisible = (): void => {
     isVisible.value ? "text" : "password"
   );
 };
-function showErrors() {
+const showErrors = () => {
   errors.tabNumber = "";
   errors.login = "";
   errors.password = "";
@@ -125,6 +107,7 @@ const handleSubmit = async () => {
   margin: 20px auto;
   padding: 20px;
 }
+
 .formHeader {
   margin-bottom: 5px;
 }
@@ -137,20 +120,24 @@ const handleSubmit = async () => {
   display: block;
   margin-bottom: 0.5rem;
 }
+
 .formHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .loginBtn.active {
   background-color: var(--highlight);
 }
+
 .remember {
   display: flex;
   align-items: center;
   margin: 1rem 0;
   color: var(--secondary);
 }
+
 .remember input {
   width: 24px;
   height: 24px;
@@ -162,6 +149,7 @@ const handleSubmit = async () => {
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
+
 label {
   color: var(--secondary);
   font-size: 16px;
