@@ -3,7 +3,7 @@
     <div class="welcome" v-if="store.currentAccount">
       <h1>Welcome!</h1>
       <p class="userData" v-for="(value, key) in store.currentAccount">
-        {{ key + "  :  " + value }}
+        {{ key + " : " + value }}
       </p>
     </div>
     <RouterLink v-else to="/accounts">login or register</RouterLink>

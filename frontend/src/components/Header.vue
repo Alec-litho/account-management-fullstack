@@ -1,13 +1,7 @@
 <template>
   <div class="header">
     <div class="buttonContainer">
-      <button
-        v-if="router.currentRoute.value.fullPath === '/register'"
-        class="backBtn"
-        @click="handleAction"
-      >
-        < Назад
-      </button>
+      <button v-if="router.currentRoute.value.fullPath === '/register'" class="backBtn" @click="handleAction">< Назад </button>
     </div>
 
     <div class="logoContainer">
@@ -33,9 +27,11 @@ const handleAction = () => {
   align-items: center;
   padding: 0 20px;
 }
+
 .buttonContainer {
   flex: 1;
 }
+
 .backBtn {
   width: 120px;
   padding: 14px;
@@ -46,13 +42,16 @@ const handleAction = () => {
   cursor: pointer;
   transition: 0.2s;
 }
+
 .backBtn:hover {
   background-color: rgba(248, 249, 253, 1);
 }
+
 .backBtn:active {
   background-color: rgba(236, 243, 255, 1);
   color: rgba(119, 166, 255, 1);
 }
+
 .logoContainer {
   display: flex;
   justify-content: flex-end;

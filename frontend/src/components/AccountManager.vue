@@ -1,5 +1,5 @@
 <template>
-  <div class="erp-login-container">
+  <div class="erpLoginContainer">
     <div class="loginWrapper">
       <img src="../assets/logo.png" alt="#" class="logo" />
       <h3 class="title">Вход в ERP-систему</h3>
@@ -12,12 +12,8 @@
         </div>
 
         <div class="accountsScroller">
-          <div
-            v-for="account in store.getAccounts"
-            :key="account.id"
-            class="accountItem"
-            @click="selectAccount(account)"
-          >
+          <div v-for="account in store.getAccounts" :key="account.id" class="accountItem"
+            @click="selectAccount(account)">
             <AccountItem :account="account" />
           </div>
         </div>
@@ -45,21 +41,20 @@ const selectAccount = (account: StoredAccount) => {
 @import url("../assets/reset.css");
 @import url("../assets/variables.css");
 
-.erp-login-container {
+.erpLoginContainer {
   width: 725px;
   height: 835px;
   display: flex;
   justify-content: center;
   margin: 40px auto;
-  background: linear-gradient(
-    213.61deg,
-    #a1c2ff 3.13%,
-    #75a3fb 46.43%,
-    #4781ee 92.74%
-  );
+  background: linear-gradient(213.61deg,
+      #a1c2ff 3.13%,
+      #75a3fb 46.43%,
+      #4781ee 92.74%);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 .loginWrapper {
   width: 470px;
   display: flex;
@@ -68,9 +63,11 @@ const selectAccount = (account: StoredAccount) => {
   gap: 20px;
   padding: 50px 0;
 }
+
 .logo {
   margin: 0 auto;
 }
+
 .title {
   color: var(--primary-w);
   margin-bottom: 6px;
@@ -109,9 +106,11 @@ const selectAccount = (account: StoredAccount) => {
   cursor: pointer;
   transition: 0.2s;
 }
+
 .addAccount:hover {
   background-color: rgba(255, 255, 255, 0.4);
 }
+
 .addAccountBtn {
   position: relative;
   width: 60px;
@@ -136,6 +135,7 @@ const selectAccount = (account: StoredAccount) => {
   gap: 20px;
   overflow-y: auto;
 }
+
 .accountsScroller::-webkit-scrollbar {
   display: none;
 }
@@ -143,20 +143,5 @@ const selectAccount = (account: StoredAccount) => {
 .accountItem {
   width: 100%;
   cursor: pointer;
-}
-
-.account-details {
-  display: flex;
-  flex-direction: column;
-}
-
-.account-name {
-  font-weight: 500;
-  color: #2c3e50;
-}
-
-.account-id {
-  color: #95a5a6;
-  font-size: 0.9em;
 }
 </style>

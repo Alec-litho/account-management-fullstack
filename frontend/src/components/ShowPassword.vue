@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   setVisible: Function,
   isVisible: Boolean,
 });
@@ -19,6 +19,7 @@ const props = defineProps({
   justify-content: center;
   cursor: pointer;
 }
+
 .showInput img {
   width: 24px;
   height: 24px;

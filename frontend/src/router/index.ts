@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import RegistrationForm from "@/components/RegistrationForm.vue";
 import AccountManager from "@/components/AccountManager.vue";
