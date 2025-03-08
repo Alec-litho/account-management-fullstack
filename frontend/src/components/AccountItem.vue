@@ -1,38 +1,26 @@
 <template>
-  <div
-    class="account"
-    @click="selectAccount"
-    :style="
-      isSelected && {
-        'border-bottom-left-radius': 0,
-        'border-bottom-right-radius': 0,
-        'box-shadow': 'none',
-      }
-    "
-  >
+  <div class="account" @click="selectAccount" :style="isSelected && {
+      'border-bottom-left-radius': 0,
+      'border-bottom-right-radius': 0,
+      'box-shadow': 'none',
+    }
+    ">
     <img src="../assets/account-empty.png" class="accountImg" alt="" />
     <div class="accountDetails">
       <p class="name">{{ account.fullName }}</p>
       <span class="id">{{ account.tabNumber }}</span>
     </div>
   </div>
+  <!-- pop up login box when user clicks on user -->
   <div v-if="isSelected" class="passwordSection">
     <div class="password">
       <div class="passwordHeader">
         <label class="label">Пароль</label>
         <ShowPassword :setVisible="setVisible" :isVisible="isVisible" />
       </div>
-      <input
-        type="password"
-        v-model="currentPassword"
-        placeholder="Введите пароль"
-        class="passwordInput"
-        ref="password"
-      />
-      <button
-        :class="!currentPassword ? 'loginBtn' : 'loginBtn active'"
-        @click="handleLogin"
-      >
+      <input type="password" v-model="currentPassword" placeholder="Введите пароль" class="passwordInput"
+        ref="password" />
+      <button :class="!currentPassword ? 'loginBtn' : 'loginBtn active'" @click="handleLogin">
         Войти
       </button>
     </div>
@@ -84,23 +72,28 @@ const setVisible = (): void => {
   border-radius: 20px;
   transition: 0.1s;
 }
+
 .account:hover {
   background-color: rgba(255, 255, 255, 0.4);
 }
+
 .accountDetails {
   height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
 .name {
   color: rgba(17, 17, 17, 1);
 }
+
 .accountImg {
   width: 60px;
   height: 60px;
   border-radius: 50%;
 }
+
 .passwordSection {
   display: flex;
   justify-content: center;
@@ -110,6 +103,7 @@ const setVisible = (): void => {
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 }
+
 .password {
   width: 90%;
   display: flex;
@@ -124,6 +118,7 @@ const setVisible = (): void => {
   width: 100%;
   color: var(--secondary);
 }
+
 .passwordHeader {
   height: 24px;
   width: 100%;
